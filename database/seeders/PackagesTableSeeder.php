@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class PackagePricesTableSeeder extends Seeder
+class PackagesTableSeeder extends Seeder
 {
 
     /**
@@ -14,12 +14,12 @@ class PackagePricesTableSeeder extends Seeder
      */
     public function run()
     {
-        
 
-        \DB::table('package_prices')->delete();
-        
-        \DB::table('package_prices')->insert(array (
-            0 => 
+
+        \DB::table('packages')->delete();
+
+        \DB::table('packages')->insert(array (
+            0 =>
             array (
                 'id' => 1,
                 'name' => '12 Jam',
@@ -28,7 +28,7 @@ class PackagePricesTableSeeder extends Seeder
                 'created_at' => '2021-09-10 16:44:38',
                 'updated_at' => '2021-09-10 16:44:38',
             ),
-            1 => 
+            1 =>
             array (
                 'id' => 2,
                 'name' => '1 Minggu',
@@ -37,7 +37,7 @@ class PackagePricesTableSeeder extends Seeder
                 'created_at' => '2021-09-10 16:44:52',
                 'updated_at' => '2021-09-10 16:44:52',
             ),
-            2 => 
+            2 =>
             array (
                 'id' => 3,
                 'name' => '1 Bulan',
@@ -46,7 +46,7 @@ class PackagePricesTableSeeder extends Seeder
                 'created_at' => '2021-09-10 16:45:04',
                 'updated_at' => '2021-09-10 16:45:04',
             ),
-            3 => 
+            3 =>
             array (
                 'id' => 4,
                 'name' => '6 Bulan',
@@ -55,7 +55,7 @@ class PackagePricesTableSeeder extends Seeder
                 'created_at' => '2021-09-10 17:16:09',
                 'updated_at' => '2021-09-10 17:16:09',
             ),
-            4 => 
+            4 =>
             array (
                 'id' => 5,
                 'name' => '12 Bulan',
@@ -65,7 +65,7 @@ class PackagePricesTableSeeder extends Seeder
                 'updated_at' => '2021-09-10 17:16:24',
             ),
         ));
-        
-        
+
+
     }
 }

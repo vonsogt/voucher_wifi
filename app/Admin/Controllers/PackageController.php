@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\PackagePrice;
+use App\Models\Package;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Encore\Admin\Controllers\HasResourceActions;
@@ -11,7 +11,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-class PackagePriceController extends Controller
+class PackageController extends Controller
 {
     use HasResourceActions;
 
@@ -24,7 +24,7 @@ class PackagePriceController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Harga Paket')
+            ->header('Paket')
             ->description(trans('admin.list'))
             ->body($this->grid());
     }
@@ -39,7 +39,7 @@ class PackagePriceController extends Controller
     public function show($id, Content $content)
     {
         return $content
-            ->header('Harga Paket')
+            ->header('Paket')
             ->description(trans('admin.show'))
             ->body($this->detail($id));
     }
@@ -54,7 +54,7 @@ class PackagePriceController extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->header('Harga Paket')
+            ->header('Paket')
             ->description(trans('admin.edit'))
             ->body($this->form()->edit($id));
     }
@@ -68,7 +68,7 @@ class PackagePriceController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header('Harga Paket')
+            ->header('Paket')
             ->description(trans('admin.create'))
             ->body($this->form());
     }
@@ -80,7 +80,7 @@ class PackagePriceController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new PackagePrice);
+        $grid = new Grid(new Package);
 
         $grid->id('ID');
         $grid->name('Nama');
@@ -103,7 +103,7 @@ class PackagePriceController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(PackagePrice::findOrFail($id));
+        $show = new Show(Package::findOrFail($id));
 
         $show->id('ID');
         $show->name('name');
@@ -122,18 +122,19 @@ class PackagePriceController extends Controller
      */
     protected function form()
     {
-        $form = new Form(new PackagePrice);
+        $form = new Form(new Package);
 
         if ($form->isEditing())
-            $form->display('ID');
+            $form->display('id', 'ID');
 
         $form->text('name', 'Nama');
         $form->text('price', 'Harga')->icon('fa-dollar');
+        $form->image('featured_image', 'Gambar');
         $form->textarea('notes', 'Catatan');
 
         if ($form->isEditing()) {
-            $form->display(trans('admin.created_at'));
-            $form->display(trans('admin.updated_at'));
+            $form->display('created_at', trans('admin.created_at'));
+            $form->display('updated_at', trans('admin.updated_at'));
         }
 
         return $form;

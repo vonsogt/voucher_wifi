@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminRolePermissionsTableSeeder::class);
         $this->call(AdminRoleUsersTableSeeder::class);
         $this->call(AdminUsersTableSeeder::class);
-        $this->call(PackagePricesTableSeeder::class);
+        $this->call(PackagesTableSeeder::class);
         $this->call(AdminMenuTableSeeder::class);
     }
 }

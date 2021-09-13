@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePackagePricesTable extends Migration
+class CreatePackagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePackagePricesTable extends Migration
      */
     public function up()
     {
-        Schema::create('package_prices', function (Blueprint $table) {
+        Schema::create('packages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->integer('price');
@@ -30,6 +30,6 @@ class CreatePackagePricesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('package_prices');
+        Schema::dropIfExists('packages');
     }
 }

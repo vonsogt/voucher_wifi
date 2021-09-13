@@ -13,5 +13,6 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
 
-    $router->resource('package-price', PackagePriceController::class);
+    $router->resource('packages', PackageController::class);
+    $router->resource('vouchers', VoucherController::class);
 });
