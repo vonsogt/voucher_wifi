@@ -84,7 +84,9 @@ class PackageController extends Controller
 
         $grid->id('ID');
         $grid->name('Nama');
-        $grid->price('Harga');
+        $grid->price('Harga')->display(function ($val) {
+            return 'Rp' . number_format($val, 2);
+        });
         $grid->created_at(trans('admin.created_at'))->display(function ($created_at) {
             return Carbon::make($created_at)->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s');
         });

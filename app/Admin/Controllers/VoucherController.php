@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Enums\PaymentStatus;
+use App\Jobs\ProcessVoucher;
 use App\Models\Package;
 use App\Models\Voucher;
 use Carbon\Carbon;
@@ -10,6 +11,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Http\Request;
 
 class VoucherController extends AdminController
 {
@@ -31,6 +33,9 @@ class VoucherController extends AdminController
 
         $grid->column('id', 'ID');
         $grid->column('package.name', 'Paket');
+        $grid->column('package.price', 'Harga Paket')->display(function ($val) {
+            return 'Rp' . number_format($val, 2);
+        });
         $grid->column('username', 'Username Voucher');
         $grid->column('password', 'Password Voucher');
         $grid->column('costumer_email', 'Email Kostumer');
@@ -44,12 +49,6 @@ class VoucherController extends AdminController
             PaymentStatus::getValue('Dikembalikan') => 'warning',
             PaymentStatus::getValue('Gagal') => 'danger',
         ]);
-        $grid->created_at(trans('admin.created_at'))->display(function ($created_at) {
-            return Carbon::make($created_at)->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s');
-        });
-        $grid->updated_at(trans('admin.updated_at'))->display(function ($updated_at) {
-            return Carbon::make($updated_at)->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s');
-        });
 
         return $grid;
     }
