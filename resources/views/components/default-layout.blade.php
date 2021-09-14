@@ -55,6 +55,9 @@
         <!-- Core theme JS-->
         <script src="{{ asset('vendor/startbootstrap/shop-homepage/js/scripts.js') }}"></script>
 
+        <!-- Custom JS -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         @stack('scripts')
     </body>
 </html>

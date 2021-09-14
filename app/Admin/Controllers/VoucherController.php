@@ -90,13 +90,12 @@ class VoucherController extends AdminController
             $form->display('id', 'ID');
         } else {
             // Add info card
-            $form->html(
-                '
-            <div class="callout callout-info">
-                <h4>Info!</h4>
-                <p><code>username</code> dan <code>password</code> akan dibuat secara otomatis.</p>
-            </div>'
-            );
+            $form->html('
+                <div class="callout callout-info">
+                    <h4>Info!</h4>
+                    <p><code>username</code> dan <code>password</code> akan dibuat secara otomatis.</p>
+                </div>
+            ');
         }
 
         $form->select('package_id', 'Paket')->options(Package::get()->pluck('name', 'id'))->required();
@@ -116,31 +115,6 @@ class VoucherController extends AdminController
             $form->display('updated_at', trans('admin.updated_at'));
         }
 
-        // Generating the username and password field
-        $form->saving(function (Form $form) {
-            $rand_string = $this->generateRandomString(8);
-            $form->username = $rand_string;
-            $form->password = $rand_string;
-        });
-
         return $form;
-    }
-
-    /**
-     * Generate random string
-     *
-     * @param  mixed $length
-     * @return void
-     */
-    function generateRandomString($length = 10)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-
-        for ($i = 0; $i < $length; $i++)
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-
-        return $randomString;
     }
 }

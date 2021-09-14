@@ -17,7 +17,9 @@
                         <div class="card h-100">
                             @if ($loop->iteration <= 3)
                                 <!-- Sale badge-->
-                                <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">BARU</div>
+                                <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
+                                    BARU
+                                </div>
                             @endif
                             <!-- Product image-->
                             <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
@@ -40,7 +42,11 @@
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><button class="btn bg-warning mt-auto" href="#" data-bs-toggle="modal" data-bs-target="#buyVoucherModal" data-bs-title="{{ $package->name }}" data-bs-id="{{ $package->id }}">Beli Voucher</button></div>
+                                <div class="text-center">
+                                    <button class="btn bg-warning mt-auto" href="#" data-bs-toggle="modal" data-bs-target="#buyVoucherModal" data-bs-title="{{ $package->name }}" data-bs-id="{{ $package->id }}">
+                                        Beli Voucher
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -51,31 +57,30 @@
         </div>
     </section>
     <!-- Modal -->
-    <div class="modal fade" id="buyVoucherModal" tabindex="-1" aria-labelledby="buyVoucherModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="buyVoucherModal" tabindex="-1" aria-labelledby="buyVoucherModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="buyVoucherModalLabel">Voucher</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form action="" method="post">
-                        @csrf
-                        <input type="hidden" name="package_id">
+                <form id="buyVoucherForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="package_id" id="package_id">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Masukkan email anda">
+                            <label for="costumer_email" class="form-label">Email</label>
+                            <input type="email" name="costumer_email" class="form-control" id="costumer_email" placeholder="Masukkan email anda" required>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Beli Sekarang</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Beli Sekarang</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     @push('scripts')
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             var buyVoucherModal = document.getElementById('buyVoucherModal')
             buyVoucherModal.addEventListener('show.bs.modal', function(event) {
@@ -83,8 +88,8 @@
                 var button = event.relatedTarget
 
                 // Extract info from data-bs-* attributes
-                var package_name =  button.getAttribute('data-bs-title')
-                var package_id =    button.getAttribute('data-bs-id')
+                var package_name = button.getAttribute('data-bs-title')
+                var package_id = button.getAttribute('data-bs-id')
 
                 // Update the modal's content.
                 var modalTitle = buyVoucherModal.querySelector('.modal-title')
@@ -93,6 +98,34 @@
                 modalTitle.textContent = 'Voucher ' + package_name
                 modalBodyPackageIdInput.value = package_id;
             })
+
+            $(document).ready(function() {
+
+                $("#buyVoucherForm").on('submit', function(e) {
+                    e.preventDefault()
+
+                    let package_id = $("#package_id").val()
+                    let costumer_email = $("#costumer_email").val()
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('api.v1.buy-voucher') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "package_id": package_id,
+                            "costumer_email": costumer_email,
+                        },
+                        success: function(response) {
+                            Swal.fire('Berhasil', response.msg, 'success')
+
+                            // Reset the Voucher Modal
+                            $('#buyVoucherModal').modal('hide')
+                            $("#buyVoucherForm").trigger("reset")
+                        }
+                    })
+                })
+
+            });
         </script>
     @endpush
 </x-default-layout>
