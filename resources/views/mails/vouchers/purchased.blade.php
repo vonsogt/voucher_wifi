@@ -1,14 +1,23 @@
 @component('mail::message')
-    # Kode Pembayaran TriPay
+# Dear Kostumer,
 
-    123456789
+Anda telah berhasil memesan voucher "12 Jam" dengan harga "Rp5,000" rupiah.
 
-    @component('mail::button', ['url' => ''])
-        Konfirmasi Pembayaran
-    @endcomponent
+Username: xxxxxxxx<br>
+Password: xxxxxxxx
 
-    <small>Jika sudah bayar, silahkan klik tombol konfirmasi diatas.</small>
+Agar dapat menggunakan akun diatas, silahkan lakukan pembayaran "TriPay" terlebih dahulu di Alfamart/Alfamidi atau e-wallet.
 
-    Thanks,<br>
-    {{ config('app.name') }}
+Jika selama 3 jam setelah email ini diterima tidak dilakukannya pembayaran, maka kode pembayaran otomatis kadaluarsa dan tidak dapat digunakan.
+
+Kode Pembayaran: 123456789
+
+@component('mail::button', ['url' => ''])
+    Konfirmasi Pembayaran
+@endcomponent
+
+<small>Jika sudah bayar, silahkan klik tombol konfirmasi diatas.</small>
+
+Terima Kasih,<br>
+{{ config('app.name') }}
 @endcomponent
