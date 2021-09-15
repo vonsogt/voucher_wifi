@@ -1,13 +1,43 @@
 <x-default-layout>
     <!-- Header-->
     <header class="bg-dark py-5">
-        <div class="container px-4 px-lg-5 my-5">
+        <div class="container px-4 px-lg-5 my-lg-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">Voucher WiFi</h1>
-                <p class="lead fw-normal text-white-50 mb-0">Terhubung Kapan dan Dimana Saja</p>
+                {{-- <p class="lead fw-normal text-white-50 mb-0">Masuk untuk akses internet.</p> --}}
             </div>
         </div>
     </header>
+    <!-- Section-->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                    <div class="card border-0 shadow rounded-3 my-5">
+                        <div class="card-body p-4 p-sm-5">
+                            <h5 class="card-title text-center mb-5 fw-light fs-5">Masuk</h5>
+                            <form>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Username</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                    <label for="floatingPassword">Password</label>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Masuk</button>
+                                </div>
+                                <hr class="my-4">
+                                Belum punya voucher? Beli melalui banner dibawah
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Section-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
@@ -71,6 +101,19 @@
                             <label for="costumer_email" class="form-label">Email</label>
                             <input type="email" name="costumer_email" class="form-control" id="costumer_email" placeholder="Masukkan email anda" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="costumer_email" class="form-label">Metode Pembayaran</label>
+                            <select name="payment_method" id="payment_method" class="form-select" aria-label="Default select example">
+                                <option selected disabled>Pilih metode pembayaran</option>
+                                @foreach (json_decode($data['payment_methods'])->data as $payment_method)
+                                    @if (in_array($payment_method->code, $data['support_payment_method']))
+                                        <option value="{{ $payment_method->code }}">
+                                            {{ $payment_method->name }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Beli Sekarang</button>
@@ -106,6 +149,7 @@
 
                     let package_id = $("#package_id").val()
                     let costumer_email = $("#costumer_email").val()
+                    let payment_method = $("#payment_method :selected").val()
 
                     $.ajax({
                         type: "POST",
@@ -114,13 +158,27 @@
                             "_token": "{{ csrf_token() }}",
                             "package_id": package_id,
                             "costumer_email": costumer_email,
+                            "payment_method": payment_method,
+                        },
+                        beforeSend: function() {
+                            // Show loading
+                            Swal.fire({
+                                title: 'Sedang Memproses',
+                                html: 'Harap tunggu sebentar, sedang memproses pembelian.',
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            });
+
+                            // To prevent double click
+                            $("#buyVoucherForm").find(":submit").prop('disabled', true)
                         },
                         success: function(response) {
                             Swal.fire('Berhasil', response.msg, 'success')
 
-                            // Reset the Voucher Modal
-                            $('#buyVoucherModal').modal('hide')
-                            $("#buyVoucherForm").trigger("reset")
+                            // Close & Reset the Voucher Modal
+                            $("#buyVoucherModal").modal("hide")
+                            $("#buyVoucherForm").trigger("reset").find(":submit").prop('disabled', false)
                         }
                     })
                 })

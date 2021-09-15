@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CallbackController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('about', [HomeController::class, 'about'])->name('about');
+
+Route::group([
+    'prefix' => 'callback',
+    'as' =>     'callback.',
+], function () {
+    // Voucher
+    Route::post('voucher-payment', [CallbackController::class, 'voucherPayment'])->name('voucher-payment');
+});

@@ -20,6 +20,7 @@ class CreateVouchersTable extends Migration
             $table->string('username');
             $table->string('password');
             $table->string('costumer_email');
+            $table->string('payment_method');
             $table->dateTime('payment_date')->nullable();
             $table->unsignedTinyInteger('payment_status')->default(PaymentStatus::BelumBayar());
             $table->timestamps();

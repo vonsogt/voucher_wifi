@@ -14,6 +14,7 @@ class VoucherApiController extends Controller
 
         $voucher->package_id = $request->package_id;
         $voucher->costumer_email = $request->costumer_email;
+        $voucher->payment_method = $request->payment_method;
 
         $voucher->save();
 
