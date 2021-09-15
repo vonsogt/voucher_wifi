@@ -17,7 +17,7 @@ class CallbackController extends Controller
         $json = $request->getContent();
 
         // generate signature untuk dicocokkan dengan X-Callback-Signature
-        $signature = hash_hmac('sha256', $json, env('TRIPAY_PRIVATE_KEY'));
+        $signature = hash_hmac('sha256', $json, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
 
         // validasi signature
         if ($callbackSignature !== $signature) {

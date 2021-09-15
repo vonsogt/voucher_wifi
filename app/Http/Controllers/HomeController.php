@@ -11,9 +11,11 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         // Ambil semua metode pembayaran yang ada di TriPay
-        $data['payment_methods'] = Http::withToken(env('TRIPAY_API_KEY', 'api_key_anda'))
+        $response = json_decode(Http::withToken(env('TRIPAY_API_KEY', 'api_key_anda'))
             ->get(env('TRIPAY_PAYMENT_CHANNEL_URL', 'https://tripay.co.id/api-sandbox/merchant/payment-channel'))
-            ->body();
+            ->body());
+
+        $data['payment_methods'] = $response->success ? $response->data : [];
 
         // Pilih metode pembayaran yang kita mau, Kode ada disini: https://tripay.co.id/developer?tab=channels
         $data['support_payment_method'] = ['BCAVA', 'ALFAMART'];

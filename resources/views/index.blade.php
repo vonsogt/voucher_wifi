@@ -105,7 +105,7 @@
                             <label for="costumer_email" class="form-label">Metode Pembayaran</label>
                             <select name="payment_method" id="payment_method" class="form-select" aria-label="Default select example">
                                 <option selected disabled>Pilih metode pembayaran</option>
-                                @foreach (json_decode($data['payment_methods'])->data as $payment_method)
+                                @foreach ($data['payment_methods'] as $payment_method)
                                     @if (in_array($payment_method->code, $data['support_payment_method']))
                                         <option value="{{ $payment_method->code }}">
                                             {{ $payment_method->name }}

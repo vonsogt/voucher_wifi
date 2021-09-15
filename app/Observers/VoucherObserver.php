@@ -55,13 +55,13 @@ class VoucherObserver
                     'quantity'  => 1
                 ]
             ],
-            'callback_url'      => env('TRIPAY_CALLBACK_URL'),
-            'return_url'        => env('TRIPAY_RETURN_URL'),
+            'callback_url'      => env('TRIPAY_CALLBACK_URL', 'callback_url_anda'),
+            'return_url'        => env('TRIPAY_RETURN_URL', 'return_url_anda'),
             'expired_time'      => (time() + (24 * 60 * 60)), // 24 jam
             'signature'         => hash_hmac('sha256', $merchantCode . $merchantRef . $amount, $privateKey)
         ];
 
-        $response = Http::withToken($apiKey)->post(env('TRIPAY_CLOSED_PAYMENT_URL'), $data);
+        $response = Http::withToken($apiKey)->post(env('TRIPAY_CLOSED_PAYMENT_URL', 'closed_payment_url_anda'), $data);
 
         return $response;
     }
