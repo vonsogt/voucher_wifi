@@ -48,6 +48,7 @@ class CallbackController extends Controller
             if ($data->status == 'PAID') // handle status PAID
             {
                 $voucher->payment_status = PaymentStatus::SudahBayar();
+                $voucher->payment_date = now();
                 $voucher->save();
 
                 return response()->json([
