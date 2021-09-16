@@ -16,13 +16,13 @@ class CallbackController extends Controller
         // ambil data JSON
         $json = $request->getContent();
 
-        $merchantCode = env('TRIPAY_MERCHANT_CODE', 'kode_merchant_anda');
-        $merchantRef = json_decode($json)->merchant_ref;
-        $amount = json_decode($json)->amount_received;
+        // $merchantCode = env('TRIPAY_MERCHANT_CODE', 'kode_merchant_anda');
+        // $merchantRef = json_decode($json)->merchant_ref;
+        // $amount = json_decode($json)->amount_received;
 
         // generate signature untuk dicocokkan dengan X-Callback-Signature
-        // $signature = hash_hmac('sha256', $json, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
-        $signature = hash_hmac('sha256', $merchantCode . $merchantRef . $amount, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
+        $signature = hash_hmac('sha256', $json, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
+        // $signature = hash_hmac('sha256', $merchantCode . $merchantRef . $amount, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
 
         // validasi signature
         if ($callbackSignature !== $signature) {
