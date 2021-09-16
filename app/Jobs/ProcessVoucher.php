@@ -33,7 +33,7 @@ class ProcessVoucher implements ShouldQueue
      */
     public function handle()
     {
-        $email = new VoucherPurchased();
-        \Mail::to($this->details['email'])->send($email);
+        $email = new VoucherPurchased($this->details);
+        \Mail::to($this->details->customer_email)->send($email);
     }
 }

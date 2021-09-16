@@ -1,23 +1,50 @@
 @component('mail::message')
-# Dear Kostumer,
+Dear Pelanggan,<br>
+Terima kasih telah membeli voucher <b>WiFi</b> di Voucher WiFi.
 
-Anda telah berhasil memesan voucher "12 Jam" dengan harga "Rp5,000" rupiah.
+# Detail Pembelian
 
-Username: xxxxxxxx<br>
-Password: xxxxxxxx
+@component('mail::table')
+        | Nama Item | Harga |
+        |:------------------- |:-------------------------------------- |
+    @foreach ($order_items as $item)
+        | {{ $item->name }}   | Rp{{ number_format($item->price, 2) }} |
+    @endforeach
+@endcomponent
 
-Agar dapat menggunakan akun diatas, silahkan lakukan pembayaran "TriPay" terlebih dahulu di Alfamart/Alfamidi atau e-wallet.
+## Metode Pembayaran
 
-Jika selama 3 jam setelah email ini diterima tidak dilakukannya pembayaran, maka kode pembayaran otomatis kadaluarsa dan tidak dapat digunakan.
+{{ $payment_name }}
 
-Kode Pembayaran: 123456789
+## Kode Pembayaran
+
+@component('mail::panel')
+<b>{{ $pay_code }}</b>
+@endcomponent
 
 @component('mail::button', ['url' => ''])
     Konfirmasi Pembayaran
 @endcomponent
 
-<small>Jika sudah bayar, silahkan klik tombol konfirmasi diatas.</small>
-
 Terima Kasih,<br>
 {{ config('app.name') }}
+
+<hr>
+
+# Cara Pembayaran
+
+@foreach ($instructions as $instruction)
+## {{ $instruction->title }}
+
+<ul class="">
+@foreach ($instruction->steps as $step)
+<li>{!! $step !!}</li>
+@endforeach
+</ul>
+
+@endforeach
+
 @endcomponent
+
+
+

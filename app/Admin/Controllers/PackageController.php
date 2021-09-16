@@ -108,9 +108,11 @@ class PackageController extends Controller
         $show = new Show(Package::findOrFail($id));
 
         $show->id('ID');
-        $show->name('name');
-        $show->price('price');
-        $show->notes('notes');
+        $show->name('Nama');
+        $show->price('Harga')->as(function ($val) {
+            return 'Rp' . number_format($val, 2);
+        });;
+        $show->notes('Catatan');
         $show->created_at(trans('admin.created_at'));
         $show->updated_at(trans('admin.updated_at'));
 

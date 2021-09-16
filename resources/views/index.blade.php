@@ -98,11 +98,11 @@
                     <div class="modal-body">
                         <input type="hidden" name="package_id" id="package_id">
                         <div class="mb-3">
-                            <label for="costumer_email" class="form-label">Email</label>
-                            <input type="email" name="costumer_email" class="form-control" id="costumer_email" placeholder="Masukkan email anda" required>
+                            <label for="customer_email" class="form-label">Email</label>
+                            <input type="email" name="customer_email" class="form-control" id="customer_email" placeholder="Masukkan email anda" required>
                         </div>
                         <div class="mb-3">
-                            <label for="costumer_email" class="form-label">Metode Pembayaran</label>
+                            <label for="payment_method" class="form-label">Metode Pembayaran</label>
                             <select name="payment_method" id="payment_method" class="form-select" aria-label="Default select example">
                                 <option selected disabled>Pilih metode pembayaran</option>
                                 @foreach ($data['payment_methods'] as $payment_method)
@@ -148,7 +148,7 @@
                     e.preventDefault()
 
                     let package_id = $("#package_id").val()
-                    let costumer_email = $("#costumer_email").val()
+                    let customer_email = $("#customer_email").val()
                     let payment_method = $("#payment_method :selected").val()
 
                     $.ajax({
@@ -157,7 +157,7 @@
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "package_id": package_id,
-                            "costumer_email": costumer_email,
+                            "customer_email": customer_email,
                             "payment_method": payment_method,
                         },
                         beforeSend: function() {

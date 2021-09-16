@@ -30,7 +30,6 @@ class VoucherObserver
     public function created(Voucher $voucher)
     {
         $this->closedPaymentTransaction($voucher);
-        $this->enqueue($voucher);
     }
 
     public function closedPaymentTransaction($voucher)
@@ -45,8 +44,8 @@ class VoucherObserver
             'method'            => $voucher->payment_method,
             'merchant_ref'      => $merchantRef,
             'amount'            => $amount,
-            'customer_name'     => $voucher->costumer_email,
-            'customer_email'    => $voucher->costumer_email,
+            'customer_name'     => $voucher->customer_email,
+            'customer_email'    => $voucher->customer_email,
             'order_items'       => [
                 [
                     'sku'       => 'PAKET' . $voucher->package->id,
@@ -62,22 +61,13 @@ class VoucherObserver
         ];
 
         $response = Http::withToken($apiKey)->post(env('TRIPAY_CLOSED_PAYMENT_URL', 'closed_payment_url_anda'), $data);
+        $body = json_decode($response->body());
+
+        // Send notification
+        if ($body->success)
+            ProcessVoucher::dispatch($body->data);
 
         return $response;
-    }
-
-    /**
-     * enqueue
-     *
-     * @param $voucher
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     */
-    public function enqueue($voucher)
-    {
-        $details = ['email' => $voucher->costumer_email];
-
-        ProcessVoucher::dispatch($details);
     }
 
     /**

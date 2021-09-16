@@ -38,8 +38,8 @@ class VoucherController extends AdminController
         });
         $grid->column('username', 'Username Voucher');
         $grid->column('password', 'Password Voucher');
-        $grid->column('costumer_email', 'Email Kostumer');
-        $grid->column('payment_date', 'Tanggal Pembayaran');
+        $grid->column('customer_email', 'Email Pelanggan');
+        $grid->column('payment_method', 'Metode Pembayaran');
         $grid->column('payment_status', 'Status Pembayaran')->display(function ($payment_status) {
             return PaymentStatus::getDescription($payment_status);
         })->label([
@@ -49,6 +49,7 @@ class VoucherController extends AdminController
             PaymentStatus::getValue('Dikembalikan') => 'warning',
             PaymentStatus::getValue('Gagal') => 'danger',
         ]);
+        $grid->column('payment_date', 'Tanggal Pembayaran');
 
         return $grid;
     }
@@ -64,14 +65,20 @@ class VoucherController extends AdminController
         $show = new Show(Voucher::findOrFail($id));
 
         $show->field('id', 'ID');
-        $show->field('package_id', __('Package id'));
-        $show->field('username', __('Username'));
-        $show->field('password', __('Password'));
-        $show->field('costumer_email', __('Costumer email'));
-        $show->field('payment_date', __('Payment date'));
-        $show->field('payment_status', __('Payment status'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
+        $show->field('package.name', 'Paket');
+        $show->field('package.price', 'Harga Paket')->as(function ($val) {
+            return 'Rp' . number_format($val, 2);
+        });;
+        $show->field('username', 'Username Voucher');
+        $show->field('password', 'Password Voucher');
+        $show->field('customer_email', 'Email Pelanggan');
+        $show->field('payment_method', 'Metode Pembayaran');
+        $show->field('payment_status', 'Status Pembayaran')->as(function ($payment_status) {
+            return PaymentStatus::getDescription($payment_status);
+        });
+        $show->field('payment_date', 'Tanggal Pembayaran');
+        $show->field('created_at', trans('admin.created_at'));
+        $show->field('updated_at', trans('admin.cpdated_at'));
 
         return $show;
     }
@@ -105,7 +112,7 @@ class VoucherController extends AdminController
             $form->hidden('username');
             $form->hidden('password');
         }
-        $form->text('costumer_email', 'Email Kostumer')->required();
+        $form->text('customer_email', 'Email Pelanggan')->required();
         $form->datetime('payment_date', 'Tanggal Pembayaran')->rules('required_if:payment_status,' . PaymentStatus::SudahBayar(), ['required_if' => 'Tanggal pembayaran wajib di isi jika status sudah dibayar.']);
         $form->radio('payment_status', 'Status Pembayaran')->options(PaymentStatus::asSelectArray())->stacked()->required();
 
