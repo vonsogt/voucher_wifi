@@ -16,8 +16,13 @@ class CallbackController extends Controller
         // ambil data JSON
         $json = $request->getContent();
 
+        $merchantCode = env('TRIPAY_MERCHANT_CODE', 'kode_merchant_anda');
+        $merchantRef = json_decode($json)->merchant_ref;
+        $amount = json_decode($json)->amount_received;
+
         // generate signature untuk dicocokkan dengan X-Callback-Signature
-        $signature = hash_hmac('sha256', $json, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
+        // $signature = hash_hmac('sha256', $json, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
+        $signature = hash_hmac('sha256', $merchantCode . $merchantRef . $amount, env('TRIPAY_PRIVATE_KEY', 'private_key_anda'));
 
         // validasi signature
         if ($callbackSignature !== $signature) {
@@ -41,33 +46,30 @@ class CallbackController extends Controller
             }
 
             // Lakukan validasi nominal
-            if (intval($data->total_amount) !== intval($voucher->package->price)) {
+            if (intval($data->total_amount) !== intval($voucher->package->price) + $data->total_fee) {
                 return "Invalid amount";
             }
 
             if ($data->status == 'PAID') // handle status PAID
             {
-                $voucher->update([
-                    'payment_status'    => PaymentStatus::SudahBayar()
-                ]);
+                $voucher->payment_status = PaymentStatus::SudahBayar();
+                $voucher->save();
 
                 return response()->json([
                     'success' => true
                 ]);
             } elseif ($data->status == 'EXPIRED') // handle status EXPIRED
             {
-                $voucher->update([
-                    'payment_status'    => PaymentStatus::Kadaluarsa()
-                ]);
+                $voucher->payment_status = PaymentStatus::Kadaluarsa();
+                $voucher->save();
 
                 return response()->json([
                     'success' => true
                 ]);
             } elseif ($data->status == 'FAILED') // handle status FAILED
             {
-                $voucher->update([
-                    'payment_status'    => PaymentStatus::Gagal()
-                ]);
+                $voucher->payment_status = PaymentStatus::Gagal();
+                $voucher->save();
 
                 return response()->json([
                     'success' => true

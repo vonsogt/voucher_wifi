@@ -8,8 +8,8 @@
             </div>
         </div>
     </header>
-    <!-- Section-->
-    <section>
+    <!-- Login Section-->
+    {{-- <section>
         <div class="container">
             <div class="row">
                 <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Section-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
