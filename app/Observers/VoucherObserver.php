@@ -67,12 +67,8 @@ class VoucherObserver
             'signature'         => hash_hmac('sha256', $merchantCode . $merchantRef . $amount, $privateKey)
         ];
 
-        dump($data);
-
         $response = Http::withToken($apiKey)->post(env('TRIPAY_CLOSED_PAYMENT_URL', 'closed_payment_url_anda'), $data);
         $body = json_decode($response->body());
-
-        dump($body);
 
         // Send notification
         if ($body->success)
