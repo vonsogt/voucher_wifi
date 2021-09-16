@@ -30,7 +30,6 @@ class VoucherPurchased extends Mailable
      */
     public function build()
     {
-        dd($this->data->instructions);
         return $this->markdown('mails.vouchers.purchased', [
             'customer_email'        => $this->data->customer_email,
             'payment_name'          => $this->data->payment_name,
