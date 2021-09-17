@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminUsersTableSeeder::class);
         $this->call(PackagesTableSeeder::class);
         $this->call(AdminMenuTableSeeder::class);
+        $this->call(RoutersTableSeeder::class);
+        $this->call(AdminConfigTableSeeder::class);
     }
 }

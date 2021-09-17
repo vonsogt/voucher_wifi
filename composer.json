@@ -8,6 +8,7 @@
         "php": "^7.3|^8.0",
         "bensampo/laravel-enum": "^3.4",
         "encore/laravel-admin": "^1.8",
+        "evilfreelancer/routeros-api-php": "^1.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel-admin-ext/config": "^1.1",

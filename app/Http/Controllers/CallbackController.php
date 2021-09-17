@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatus;
+use App\Models\Router;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
+use \RouterOS\Client;
+use \RouterOS\Query;
 
 class CallbackController extends Controller
 {
@@ -51,6 +54,8 @@ class CallbackController extends Controller
                 $voucher->payment_date = now();
                 $voucher->save();
 
+                // $this->addUserToRouter($voucher);
+
                 return response()->json([
                     'success' => true
                 ]);
@@ -74,5 +79,43 @@ class CallbackController extends Controller
         }
 
         return "No action was taken";
+    }
+
+    public function addUserToRouter($data)
+    {
+        // Pilih router dari config
+        $router = Router::where('name', config('active_router'))->first();
+
+        // Initiate client with config object
+        $client = new Client([
+            'host' => $router->ip_device,
+            'user' => $router->username,
+            'pass' => $router->password,
+            'port' => 8728,
+        ]);
+
+        dump($client);
+
+        // Akun voucher atau user biasa
+        $user_mode = $data->username === $data->password ? 'vc-' : 'up-';
+
+        // Build query for creating new user
+        // $query =
+        //     (new Query('/ip/hotspot/user/profile/add'))
+        //     ->equal('name', 'test-' . $i);
+
+        // Build query for details about user profile
+        $query = new Query('/ip/hotspot/user/add', [
+            'name'              => $data->username,
+            'password'          => $data->password,
+            'disabled'          => 'no',
+            'limit-uptime'      => 0, // TODO
+            'comment'           => $user_mode,
+        ]);
+
+        // Send query and read response from RouterOS
+        $response = $client->query($query)->read();
+
+        dd($response);
     }
 }
