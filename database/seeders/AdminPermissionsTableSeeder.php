@@ -93,6 +93,36 @@ class AdminPermissionsTableSeeder extends Seeder
                 'created_at' => '2021-09-10 16:36:33',
                 'updated_at' => '2021-09-10 16:36:33',
             ),
+            7 => 
+            array (
+                'id' => 8,
+                'name' => 'Packages',
+                'slug' => 'admin.packages',
+                'http_method' => '',
+                'http_path' => '/packages*',
+                'created_at' => '2021-09-17 16:52:36',
+                'updated_at' => '2021-09-17 16:53:05',
+            ),
+            8 => 
+            array (
+                'id' => 9,
+                'name' => 'Vouchers',
+                'slug' => 'admin.vouchers',
+                'http_method' => '',
+                'http_path' => '/vouchers*',
+                'created_at' => '2021-09-17 16:53:23',
+                'updated_at' => '2021-09-17 16:53:23',
+            ),
+            9 => 
+            array (
+                'id' => 10,
+                'name' => 'Routers',
+                'slug' => 'admin.routers',
+                'http_method' => '',
+                'http_path' => '/routers*',
+                'created_at' => '2021-09-17 16:53:48',
+                'updated_at' => '2021-09-17 16:53:48',
+            ),
         ));
         
         

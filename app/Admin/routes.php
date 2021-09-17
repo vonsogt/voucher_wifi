@@ -15,4 +15,5 @@ Route::group([
 
     $router->resource('packages', PackageController::class);
     $router->resource('vouchers', VoucherController::class);
+    $router->resource('routers', RouterController::class);
 });

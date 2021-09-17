@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Voucher extends Model
+class Router extends Model
 {
     use HasFactory;
 
@@ -14,13 +14,5 @@ class Voucher extends Model
      *
      * @var string
      */
-    protected $table = 'vouchers';
-
-    /**
-     * Relationship
-     */
-    public function package()
-    {
-        return $this->belongsTo(Package::class);
-    }
+    protected $table = 'routers';
 }

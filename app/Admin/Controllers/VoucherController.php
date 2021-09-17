@@ -78,7 +78,7 @@ class VoucherController extends AdminController
         });
         $show->field('payment_date', 'Tanggal Pembayaran');
         $show->field('created_at', trans('admin.created_at'));
-        $show->field('updated_at', trans('admin.cpdated_at'));
+        $show->field('updated_at', trans('admin.updated_at'));
 
         return $show;
     }
