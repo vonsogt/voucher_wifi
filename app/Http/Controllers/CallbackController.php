@@ -7,6 +7,7 @@ use App\Models\Router;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use \RouterOS\Client;
+use RouterOS\Config;
 use \RouterOS\Query;
 
 class CallbackController extends Controller
@@ -54,7 +55,7 @@ class CallbackController extends Controller
                 $voucher->payment_date = now();
                 $voucher->save();
 
-                // $this->addUserToRouter($voucher);
+                $this->addUserToRouter($voucher);
 
                 return response()->json([
                     'success' => true
@@ -86,36 +87,30 @@ class CallbackController extends Controller
         // Pilih router dari config
         $router = Router::where('name', config('active_router'))->first();
 
-        // Initiate client with config object
-        $client = new Client([
-            'host' => $router->ip_device,
-            'user' => $router->username,
-            'pass' => $router->password,
-            'port' => 8728,
-        ]);
-
-        dump($client);
-
-        // Akun voucher atau user biasa
+        // Add category to comment (optional)
         $user_mode = $data->username === $data->password ? 'vc-' : 'up-';
 
-        // Build query for creating new user
-        // $query =
-        //     (new Query('/ip/hotspot/user/profile/add'))
-        //     ->equal('name', 'test-' . $i);
+        // Create config object with parameters
+        $config =
+            (new Config())
+            ->set('host', $router->ip_device)
+            ->set('port', 8728)
+            ->set('pass', $router->password)
+            ->set('user', $router->username);
+
+        // Initiate client with config object
+        $client = new Client($config);
 
         // Build query for details about user profile
-        $query = new Query('/ip/hotspot/user/add', [
-            'name'              => $data->username,
-            'password'          => $data->password,
-            'disabled'          => 'no',
-            'limit-uptime'      => 0, // TODO
-            'comment'           => $user_mode,
-        ]);
+        $query = (new Query('/ip/hotspot/user/add'))
+            ->equal("name", $data->username)
+            ->equal("password", $data->password)
+            ->equal("limit-uptime", $data->time_limit)
+            ->equal("comment", $user_mode);
 
-        // Send query and read response from RouterOS
-        $response = $client->query($query)->read();
+        // Add user
+        $out = $client->query($query)->read();
 
-        dd($response);
+        return $out;
     }
 }

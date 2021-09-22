@@ -12,6 +12,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class VoucherController extends AdminController
 {
@@ -92,6 +93,15 @@ class VoucherController extends AdminController
     {
         $form = new Form(new Voucher());
 
+        // Ambil semua metode pembayaran yang ada di TriPay
+        $response = json_decode(Http::withToken(env('TRIPAY_API_KEY', 'api_key_anda'))
+            ->get(env('TRIPAY_PAYMENT_CHANNEL_URL', 'https://tripay.co.id/api-sandbox/merchant/payment-channel'))
+            ->body());
+        $data['payment_methods'] = $response->success ? $response->data : [];
+
+        // Pilih metode pembayaran yang kita mau, Kode ada disini: https://tripay.co.id/developer?tab=channels
+        $data['support_payment_method'] = ['BCAVA', 'ALFAMART'];
+
         if ($form->isEditing()) {
             $form->display('id', 'ID');
         } else {
@@ -113,7 +123,18 @@ class VoucherController extends AdminController
             $form->hidden('password');
         }
         $form->text('customer_email', 'Email Pelanggan')->required();
-        $form->datetime('payment_date', 'Tanggal Pembayaran')->rules('required_if:payment_status,' . PaymentStatus::SudahBayar(), ['required_if' => 'Tanggal pembayaran wajib di isi jika status sudah dibayar.']);
+        $form->select('payment_method', 'Metode Pembayaran')
+            ->options(function () use ($data) {
+                $options = [];
+                foreach ($data['payment_methods'] as $payment_method) {
+                    if (in_array($payment_method->code, $data['support_payment_method']))
+                        $options[$payment_method->code] = $payment_method->name;
+                }
+
+                return $options;
+            })->rules('required', ['required' => 'Metode pembayaran wajib di isi.']);
+        $form->datetime('payment_date', 'Tanggal Pembayaran')
+            ->rules('required_if:payment_status,' . PaymentStatus::SudahBayar(), ['required_if' => 'Tanggal pembayaran wajib di isi jika status sudah dibayar.']);
         $form->radio('payment_status', 'Status Pembayaran')->options(PaymentStatus::asSelectArray())->stacked()->required();
 
         if ($form->isEditing()) {

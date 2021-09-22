@@ -12,6 +12,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ asset('vendor/startbootstrap/shop-homepage/css/styles.css') }}" rel="stylesheet" />
+
+        @stack('styles')
     </head>
     <body>
         <!-- Navigation-->

@@ -133,7 +133,8 @@ class PackageController extends Controller
 
         $form->text('name', 'Nama');
         $form->text('price', 'Harga')->icon('fa-dollar');
-        $form->image('featured_image', 'Gambar');
+        $form->text('time_limit', 'Batas Waktu')->help('[wdhm] Example : 30d = 30days; 12h = 12hours; 30m = 30minutes; 5h30m = 5hours 30minutes');
+        $form->image('featured_image', 'Gambar')->removable();;
         $form->textarea('notes', 'Catatan');
 
         if ($form->isEditing()) {
