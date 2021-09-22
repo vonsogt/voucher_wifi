@@ -82,13 +82,19 @@ class CallbackController extends Controller
         return "No action was taken";
     }
 
-    public function addUserToRouter($data)
+    /**
+     * addUserToRouter
+     *
+     * @param  mixed $data
+     * @return void
+     */
+    public function addUserToRouter($voucher)
     {
         // Pilih router dari config
         $router = Router::where('name', config('active_router'))->first();
 
         // Add category to comment (optional)
-        $user_mode = $data->username === $data->password ? 'vc-' : 'up-';
+        $user_mode = $voucher->username === $voucher->password ? 'vc-' : 'up-';
 
         // Create config object with parameters
         $config =
@@ -103,9 +109,9 @@ class CallbackController extends Controller
 
         // Build query for details about user profile
         $query = (new Query('/ip/hotspot/user/add'))
-            ->equal("name", $data->username)
-            ->equal("password", $data->password)
-            ->equal("limit-uptime", $data->time_limit)
+            ->equal("name", $voucher->username)
+            ->equal("password", $voucher->password)
+            ->equal("limit-uptime", $voucher->package->time_limit)
             ->equal("comment", $user_mode);
 
         // Add user

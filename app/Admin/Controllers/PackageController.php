@@ -82,6 +82,9 @@ class PackageController extends Controller
     {
         $grid = new Grid(new Package);
 
+        // Order by `id` DESC
+        $grid->model()->orderBy('id', 'desc');
+
         $grid->id('ID');
         $grid->name('Nama');
         $grid->price('Harga')->display(function ($val) {

@@ -32,6 +32,9 @@ class VoucherController extends AdminController
     {
         $grid = new Grid(new Voucher());
 
+        // Order by `id` DESC
+        $grid->model()->orderBy('id', 'desc');
+
         $grid->column('id', 'ID');
         $grid->column('package.name', 'Paket');
         $grid->column('package.price', 'Harga Paket')->display(function ($val) {

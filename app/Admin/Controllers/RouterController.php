@@ -26,6 +26,9 @@ class RouterController extends AdminController
     {
         $grid = new Grid(new Router());
 
+        // Order by `id` DESC
+        $grid->model()->orderBy('id', 'desc');
+
         $grid->column('id', 'ID');
         $grid->column('name', 'Nama');
         $grid->column('ip_device', 'IP Perangkat');
