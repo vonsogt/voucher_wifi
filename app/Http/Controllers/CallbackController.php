@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatus;
-use App\Models\Router;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
-use \RouterOS\Client;
-use RouterOS\Config;
-use \RouterOS\Query;
 
 class CallbackController extends Controller
 {
@@ -55,8 +51,6 @@ class CallbackController extends Controller
                 $voucher->payment_date = now();
                 $voucher->save();
 
-                $this->addUserToRouter($voucher);
-
                 return response()->json([
                     'success' => true
                 ]);
@@ -80,43 +74,5 @@ class CallbackController extends Controller
         }
 
         return "No action was taken";
-    }
-
-    /**
-     * addUserToRouter
-     *
-     * @param  mixed $data
-     * @return void
-     */
-    public function addUserToRouter($voucher)
-    {
-        // Pilih router dari config
-        $router = Router::where('name', config('active_router'))->first();
-
-        // Add category to comment (optional)
-        $user_mode = $voucher->username === $voucher->password ? 'vc-' : 'up-';
-
-        // Create config object with parameters
-        $config =
-            (new Config())
-            ->set('host', $router->ip_device)
-            ->set('port', 8728)
-            ->set('pass', $router->password)
-            ->set('user', $router->username);
-
-        // Initiate client with config object
-        $client = new Client($config);
-
-        // Build query for details about user profile
-        $query = (new Query('/ip/hotspot/user/add'))
-            ->equal("name", $voucher->username)
-            ->equal("password", $voucher->password)
-            ->equal("limit-uptime", $voucher->package->time_limit)
-            ->equal("comment", $user_mode);
-
-        // Add user
-        $out = $client->query($query)->read();
-
-        return $out;
     }
 }
