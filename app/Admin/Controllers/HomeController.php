@@ -5,15 +5,14 @@ namespace App\Admin\Controllers;
 use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
-use App\Models\Router;
 use App\Models\Voucher;
 use Encore\Admin\Controllers\Dashboard;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\InfoBox;
-use \RouterOS\Client;
-use \RouterOS\Query;
+use Encore\Admin\Widgets\Box;
+
 
 class HomeController extends Controller
 {
@@ -57,24 +56,9 @@ class HomeController extends Controller
                 });
             });
             // ->row(function (Row $row) {
-            //     // Pilih router dari config
-            //     $router = Router::where('name', config('active_router'))->first();
+            //     $box = new Box('Laporan Bulanan', view('admin.vouchers.chartjs.monthly-sales'));
 
-            //     // Initiate client with config object
-            //     $client = new Client([
-            //         'host' => $router->ip_device,
-            //         'user' => $router->username,
-            //         'pass' => $router->password,
-            //         'port' => 8728,
-            //     ]);
-
-            //     // Build query for details about user profile
-            //     $query = new Query('/ip/hotspot/user/print');
-
-            //     // Send query and read response from RouterOS
-            //     $response = $client->query($query)->read();
-
-            //     dump($response);
+            //     $row->column(12, $box);
             // });
     }
 }
