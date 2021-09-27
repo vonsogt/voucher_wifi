@@ -6,7 +6,9 @@ use App\Enums\PaymentStatus;
 use App\Jobs\ProcessVoucher;
 use App\Models\Router;
 use App\Models\Voucher;
+use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\MessageBag;
 use RouterOS\Client;
 use RouterOS\Config;
 use RouterOS\Query;
@@ -174,8 +176,17 @@ class VoucherObserver
             ->set('pass', $router->password)
             ->set('user', $router->username);
 
-        // Initiate client with config object
-        $client = new Client($config);
+        try {
+            // Initiate client with config object
+            $client = new Client($config);
+        } catch (Exception $e) {
+            $warning = new MessageBag([
+                'title'   => 'Peringatan',
+                'message' => 'Tidak dapat menambahkan <code>username</code> dan <code>password</code> ke Router, silahkan cek data router dengan benar.',
+            ]);
+
+            return back()->with(compact('warning'));
+        }
 
         // Build query for details about user profile
         $query = (new Query('/ip/hotspot/user/add'))

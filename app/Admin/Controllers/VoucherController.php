@@ -4,16 +4,13 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Voucher\PrintVoucher;
 use App\Enums\PaymentStatus;
-use App\Jobs\ProcessVoucher;
 use App\Models\Package;
 use App\Models\Voucher;
-use Carbon\Carbon;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class VoucherController extends AdminController
 {
@@ -146,6 +143,12 @@ class VoucherController extends AdminController
         return $form;
     }
 
+    /**
+     * voucherPrint
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function voucherPrint(Request $request)
     {
         $voucher = Voucher::findOrFail($request->id);
