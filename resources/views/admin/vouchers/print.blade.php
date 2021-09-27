@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <table class="voucher" style=" width: 220px;">
+    <table class="voucher" style="margin-left: auto; margin-right: auto; width: 220px; border:1px solid black;">
         <tbody>
             <!-- Logo Hotspotname -->
             <tr>
