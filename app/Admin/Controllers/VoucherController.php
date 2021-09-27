@@ -96,14 +96,8 @@ class VoucherController extends AdminController
     {
         $form = new Form(new Voucher());
 
-        // Ambil semua metode pembayaran yang ada di TriPay
-        $response = json_decode(Http::withToken(env('TRIPAY_API_KEY', 'api_key_anda'))
-            ->get(env('TRIPAY_PAYMENT_CHANNEL_URL', 'https://tripay.co.id/api-sandbox/merchant/payment-channel'))
-            ->body());
-        $data['payment_methods'] = $response->success ? $response->data : [];
-
-        // Pilih metode pembayaran yang kita mau, Kode ada disini: https://tripay.co.id/developer?tab=channels
-        $data['support_payment_method'] = ['BCAVA', 'ALFAMART'];
+        $home = new \App\Http\Controllers\HomeController;
+        $payment_methods = $home->paymentMethods();
 
         if ($form->isEditing()) {
             $form->display('id', 'ID');
@@ -127,11 +121,10 @@ class VoucherController extends AdminController
         }
         $form->text('customer_email', 'Email Pelanggan')->required();
         $form->select('payment_method', 'Metode Pembayaran')
-            ->options(function () use ($data) {
+            ->options(function () use ($payment_methods) {
                 $options = [];
-                foreach ($data['payment_methods'] as $payment_method) {
-                    if (in_array($payment_method->code, $data['support_payment_method']))
-                        $options[$payment_method->code] = $payment_method->name;
+                foreach ($payment_methods as $payment_method) {
+                    $options[$payment_method->code] = $payment_method->name;
                 }
 
                 return $options;
