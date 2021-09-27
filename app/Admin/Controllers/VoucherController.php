@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Voucher\PrintVoucher;
 use App\Enums\PaymentStatus;
 use App\Jobs\ProcessVoucher;
 use App\Models\Package;
@@ -54,6 +55,10 @@ class VoucherController extends AdminController
             PaymentStatus::getValue('Gagal') => 'danger',
         ]);
         $grid->column('payment_date', 'Tanggal Pembayaran');
+
+        $grid->actions(function ($actions) {
+            $actions->add(new PrintVoucher);
+        });
 
         return $grid;
     }
@@ -139,5 +144,12 @@ class VoucherController extends AdminController
         }
 
         return $form;
+    }
+
+    public function voucherPrint(Request $request)
+    {
+        $voucher = Voucher::findOrFail($request->id);
+
+        return view('admin.vouchers.print', compact('voucher'));
     }
 }
