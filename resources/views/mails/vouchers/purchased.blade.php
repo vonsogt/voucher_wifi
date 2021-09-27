@@ -22,6 +22,10 @@ Terima kasih telah membeli voucher <b>WiFi</b> di Voucher WiFi.
 <b>{{ $pay_code }}</b>
 @endcomponent
 
+## Kode Voucher
+
+{{ $voucher_code }}
+
 @component('mail::button', ['url' => ''])
     Konfirmasi Pembayaran
 @endcomponent

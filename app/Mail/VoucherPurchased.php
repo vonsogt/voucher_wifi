@@ -36,6 +36,7 @@ class VoucherPurchased extends Mailable
             'fee_customer'          => $this->data->fee_customer,
             'pay_code'              => $this->data->pay_code,
             'order_items'           => $this->data->order_items,
+            'voucher_code'          => $this->data->voucher_code,
             'instructions'          => $this->data->instructions,
         ]);
     }

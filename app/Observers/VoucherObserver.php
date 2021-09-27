@@ -35,7 +35,10 @@ class VoucherObserver
     public function created(Voucher $voucher)
     {
         // Add transaction
-        $this->closedPaymentTransaction($voucher);
+        if ($voucher->payment_method == 'TUNAI')
+            $this->cashPaymentTransaction($voucher);
+        else
+            $this->closedPaymentTransaction($voucher);
 
         // Add username & password to connected Router
         if ($voucher->payment_status == PaymentStatus::SudahBayar())
@@ -93,10 +96,42 @@ class VoucherObserver
         $body = json_decode($response->body());
 
         // Send notification
-        if ($body->success)
+        if ($body->success) {
+            $body->data->voucher_code = $voucher->username;
             ProcessVoucher::dispatch($body->data);
+        }
 
         return $body;
+    }
+
+    public function cashPaymentTransaction($voucher)
+    {
+        $data['customer_email'] = $voucher->customer_email;
+        $data['payment_name'] = $voucher->payment_method;
+        $data['fee_customer'] = 0;
+        $data['pay_code'] = 'INV' . str_pad($voucher->id, 8, '0', STR_PAD_LEFT);
+        $data['order_items'] = [
+            [
+                'sku'       => 'PAKET' . $voucher->package->id,
+                'name'      => $voucher->package->name,
+                'price'     => $voucher->package->price,
+                'quantity'  => 1
+            ]
+        ];
+        $data['voucher_code'] = $voucher->username;
+        $data['instructions'] = [
+            [
+                'title' => 'Datang ke merchant',
+                'steps' => [
+                    'Datang ke merchant yang didukung',
+                    'Perlihatkan kode pembayaran',
+                    'Kasih uang tunai sesuai dengan harga voucher',
+                    'Transaksi sukses, anda akan diberikan lembaran voucher'
+                ]
+            ]
+        ];
+
+        ProcessVoucher::dispatch(json_decode(collect($data)));
     }
 
     /**
@@ -105,7 +140,7 @@ class VoucherObserver
      * @param  mixed $length
      * @return void
      */
-    function generateRandomString($length = 10)
+    public function generateRandomString($length = 10)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
