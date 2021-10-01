@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\V1\PackageApiController;
 use App\Http\Controllers\API\V1\VoucherApiController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +25,12 @@ Route::group([
     'prefix' => 'v1',
     'as' =>     'api.v1.'
 ], function () {
+    // HomeController
+    Route::get('payment-methods', [HomeController::class, 'paymentMethods'])->name('payment-methods');
+
+    // PackageApiController
+    Route::get('packages', [PackageApiController::class, 'index'])->name('packages');
+
     // VoucherApiController
     Route::post('buy-voucher', [VoucherApiController::class, 'buyVoucher'])->name('buy-voucher');
 });
