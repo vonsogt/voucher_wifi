@@ -40,7 +40,7 @@
 
         <!-- Footer-->
         <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">&copy; {{ now()->format('Y') }} Voucher WiFi by <a class="text-decoration-none" href="">SkyNet</a> </p></div>
+            <div class="container"><p class="m-0 text-center text-white">&copy; {{ now()->format('Y') }} Voucher WiFi by <a class="text-decoration-none" href="">Villamas</a> </p></div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
