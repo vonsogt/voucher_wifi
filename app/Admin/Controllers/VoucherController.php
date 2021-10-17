@@ -57,6 +57,16 @@ class VoucherController extends AdminController
             $actions->add(new PrintVoucher);
         });
 
+        // Custom Export
+        $grid->export(function ($export) {
+
+            $export->filename('Voucher');
+
+            $export->column('payment_status', function ($value, $original) {
+                return PaymentStatus::getDescription($original);
+            });
+        });
+
         return $grid;
     }
 
