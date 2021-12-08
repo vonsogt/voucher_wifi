@@ -172,7 +172,7 @@ class VoucherObserver
         $config =
             (new Config())
             ->set('host', $router->ip_device)
-            ->set('port', 8728)
+            ->set('port', 8729)
             ->set('pass', $router->password)
             ->set('user', $router->username);
 
