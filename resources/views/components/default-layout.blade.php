@@ -19,6 +19,24 @@
 
         {{ $slot }}
 
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hubungi Kami</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Jika ada keluhan atau kendala pada layanan kami, silahkan hubungi kami di <a class="text-primary t" target="_blank" href="https://wa.me/6281218982570/?text=Halo Saya Dari Website Villamas WiFi."><strong>081218982570</strong></a> an Yovan Sakti.
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">&copy; {{ now()->format('Y') }} Voucher WiFi by <a class="text-decoration-none" href="">Villamas</a> </p></div>

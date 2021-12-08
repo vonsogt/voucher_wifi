@@ -20,7 +20,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">Tentang</a></li>
                 </ul>
                 <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
+                    <button class="btn btn-outline-dark" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <i class="bi-telephone-fill me-1"></i>
                         Hubungi Kami
                     </button>
