@@ -41,7 +41,7 @@ class CallbackController extends Controller
             }
 
             // Lakukan validasi nominal
-            if (intval($data->total_amount) !== intval($voucher->package->price) + $data->total_fee) {
+            if (intval($data->total_amount) !== intval($voucher->package->price)) {
                 return "Invalid amount";
             }
 
