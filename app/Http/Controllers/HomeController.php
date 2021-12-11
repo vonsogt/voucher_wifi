@@ -71,6 +71,7 @@ class HomeController extends Controller
             }
         } catch (\Throwable $th) {
             // throw $th;
+            \Log::error($th);
         }
 
         return $payment_methods;

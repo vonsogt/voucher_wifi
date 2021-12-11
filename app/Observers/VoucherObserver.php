@@ -97,6 +97,8 @@ class VoucherObserver
         $response = Http::withToken($apiKey)->post(env('TRIPAY_CLOSED_PAYMENT_URL', 'closed_payment_url_anda'), $data);
         $body = json_decode($response->body());
 
+        \Log::debug($response->body());
+
         // Send notification
         if ($body->success) {
             $body->data->voucher_code = $voucher->username;
